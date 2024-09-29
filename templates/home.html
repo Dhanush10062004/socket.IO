@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Toggle Button Example</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #4a90e2;
+        }
+
+        #toggleBtn {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #4caf50; /* Green */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #toggleBtn:hover {
+            background-color: #45a049; /* Darker green */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            var socket = io();
+
+            // Listen for toggle state updates from the server
+            socket.on('toggle_update', (msg) => {
+                if (msg === 'ON') {
+                    document.querySelector('#status').innerHTML = "Dhanush - you're in<br>Toggle is: ON";
+                } else {
+                    document.querySelector('#status').innerHTML = "Toggle is: OFF";
+                }
+                document.querySelector('#toggleBtn').innerHTML = (msg === 'ON') ? 'Turn OFF' : 'Turn ON';
+            });
+
+            // When the button is clicked, emit the toggle event
+            document.querySelector('#toggleBtn').onclick = () => {
+                socket.emit('toggle');
+            };
+        });
+    </script>
+</head>
+<body>
+    <h2>Interactive Toggle Button</h2>
+    <button id="toggleBtn">Turn ON</button>
+    <p id="status">Toggle is: OFF</p>
+</body>
+</html>
